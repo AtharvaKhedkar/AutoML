@@ -18,7 +18,13 @@ showWarningOnDirectExecution = true
 
 # Level of logging: 'error', 'warning', 'info', or 'debug'.
 # Default: 'info'
-logLevel = "debug"
+#logLevel = "debug"
+
+[logger]
+
+# Level of logging: 'error', 'warning', 'info', or 'debug'.
+# Default: 'info'
+level = "debug"
 
 
 [client]
