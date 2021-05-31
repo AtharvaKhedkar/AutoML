@@ -1,3 +1,6 @@
 streamlit 
 pandas
 pycaret
+p5py
+PEP517
+gcc7
