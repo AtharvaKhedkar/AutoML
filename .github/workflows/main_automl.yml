@@ -43,9 +43,9 @@ jobs:
     steps:
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
+      uses: azure/login@v1
       with:
         app-name: 'automl'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_98bfbac7552a40c89a12d79de42185f3 }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
         images: 'mlauto.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_d8dbc19bd6414a6981da38b46d7cb960 }}/automl:${{ github.sha }}'
