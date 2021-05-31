@@ -1,6 +1,9 @@
+PyPI
+pyinstaller
 streamlit 
 pandas
-pycaret
+bottleneck
 p5py
-PEP517
+pep517
 gcc7
+pycaret
