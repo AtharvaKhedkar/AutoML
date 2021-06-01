@@ -3,7 +3,6 @@ import pandas as pd
 from sklearn.datasets import load_boston
 import matplotlib.pyplot as plt
 import seaborn as sns
-import streamlit.components.v1 as components
 from pycaret.regression import *
 import base64
 import io
@@ -33,7 +32,8 @@ def build_model(df):
     st.info(Y.name)
 
     # Build  model
-    st.write('Building your models, Please Wait....') 
+    wip = 'Building your models, Please Wait....'
+    st.write(wip) 
     if usecase == "classification":
         table = build_classifier(df,label)
     else:
@@ -112,7 +112,7 @@ else:
         X = pd.DataFrame(boston.data, columns=boston.feature_names)
         Y = pd.Series(boston.target, name='Price')
         label = 'Price'
-        usecase = 'classification'
+        usecase = 'regression'
         df = pd.concat( [X,Y], axis=1 )
 
         st.markdown('The Boston housing dataset is used as the example.')
