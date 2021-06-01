@@ -2,12 +2,12 @@ import streamlit as st
 import pandas as pd
 from sklearn.datasets import load_boston
 import matplotlib.pyplot as plt
-from pycaret.regression import *
 import seaborn as sns
 import streamlit.components.v1 as components
-
+from pycaret.regression import *
 import base64
 import io
+from classification import build_classifier
 #---------------------------------#
 # Page layout
 ## Page expands to full width
@@ -33,12 +33,16 @@ def build_model(df):
     st.info(Y.name)
 
     # Build  model
-    st.write('Building your models, Please Wait....')
-    m1 = setup(data = df, target = label, silent =True)
-
-    best = compare_models()
+    st.write('Building your models, Please Wait....') 
+    if usecase == "classification":
+        table = build_classifier(df,label)
+    else:
+        m1 = setup(data = df,target = label,silent =True)
+        best = compare_models()
+        table = pull() 
     st.subheader('2. Table of Model Performance')
-    table = pull()
+
+
     st.write(pull())
     st.markdown(filedownload(table,'model_comparison.csv'), unsafe_allow_html=True)
 
@@ -68,12 +72,21 @@ st.write("""
 with st.sidebar.header('1. Upload your CSV data'):
     uploaded_file = st.sidebar.file_uploader("Upload your input CSV file", type=["csv"])
 
+st.sidebar.subheader('OR')
+
+with st.sidebar.header('Paste CSV data link here'):
+    uploaded_text = st.sidebar.text_input("Paste csv data link here")
+    if uploaded_text.endswith(".csv") and uploaded_text.startswith("http"):
+        uploaded_file = uploaded_text
+    elif uploaded_text == '':
+        pass
+    else:
+        st.sidebar.error('Please enter a valid csv link')
+    
+
 # Sidebar - Specify parameter settings
 with st.sidebar.header('2. Set Parameters'):
-    usecase = st.sidebar.selectbox('Select dataset type (Regression/Classification)', ['regression','classification'])
-with st.sidebar.subheader('Created by:'):
-    st.sidebar.markdown('''[Atharva Khedkar](https://atharvakhedkar.co/)''')
-    
+    usecase = st.sidebar.selectbox('Select dataset type (Regression/Classification)', ['regression','classification'])    
 
 #---------------------------------#
 # Main panel
@@ -81,18 +94,17 @@ with st.sidebar.subheader('Created by:'):
 st.subheader('1. Dataset')
 
 if uploaded_file is not None:
-    if usecase == 'regression':
-        from pycaret.regression import *
-    elif usecase == 'classification':
-        from pycaret.classification import *
-    uploaded_file.seek(0)
+    
+    if type(uploaded_file) is not str:
+        uploaded_file.seek(0)
     df = pd.read_csv(uploaded_file)
     st.markdown('**1.1. Glimpse of dataset**')
     st.write(df)
     label = None 
     label = st.sidebar.selectbox('Select target attribute',df.columns)
     if label is not None:
-        build_model(df)
+            build_model(df)
+        
 else:
     st.info('Awaiting for CSV file to be uploaded.')
     if st.button('Press to use Example Dataset'):
@@ -105,6 +117,8 @@ else:
 
         st.markdown('The Boston housing dataset is used as the example.')
         st.write(df.head(5))
-
         build_model(df)
 
+
+with st.sidebar.subheader('Created by:'):
+    st.sidebar.markdown('''[Atharva Khedkar](https://atharvakhedkar.co/)''')
