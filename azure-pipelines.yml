@@ -14,7 +14,7 @@ variables:
   imageRepository: 'automl'
   containerRegistry: 'mlauto.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
-  tag: '$(TAG)'
+  tag: '$(tag)'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
