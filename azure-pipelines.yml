@@ -37,3 +37,8 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+    - task: AzureAppServiceManage@0
+      inputs:
+        azureSubscription: 'Visual Studio Enterprise Subscription (7ac37fca-a1c1-48d5-b1f1-b84bdae9cebf)'
+        Action: 'Restart Azure App Service'
+        WebAppName: 'automl'
