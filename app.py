@@ -4,6 +4,7 @@ from sklearn.datasets import load_boston
 import matplotlib.pyplot as plt
 from pycaret.regression import *
 import seaborn as sns
+import streamlit.components.v1 as components
 
 import base64
 import io
@@ -32,15 +33,16 @@ def build_model(df):
     st.info(Y.name)
 
     # Build  model
-    
+    st.write('Building your models, Please Wait....')
     m1 = setup(data = df, target = label, silent =True)
-    print('\n')
+
     best = compare_models()
     st.subheader('2. Table of Model Performance')
+    table = pull()
     st.write(pull())
-    # st.markdown(filedownload(predictions_train,'score.csv'), unsafe_allow_html=True)
+    st.markdown(filedownload(table,'model_comparison.csv'), unsafe_allow_html=True)
 
-    st.subheader('3. Plot of Model Performance (Test set)')
+    st.subheader('3. Plot of Model Performance')
 
 def filedownload(df, filename):
     csv = df.to_csv(index=True)
@@ -69,6 +71,8 @@ with st.sidebar.header('1. Upload your CSV data'):
 # Sidebar - Specify parameter settings
 with st.sidebar.header('2. Set Parameters'):
     usecase = st.sidebar.selectbox('Select dataset type (Regression/Classification)', ['regression','classification'])
+with st.sidebar.subheader('Created by:'):
+    st.sidebar.markdown('''[Atharva Khedkar](https://atharvakhedkar.co/)''')
     
 
 #---------------------------------#
