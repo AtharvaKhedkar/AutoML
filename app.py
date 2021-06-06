@@ -42,11 +42,21 @@ def build_model(df):
         table = pull() 
     st.subheader('2. Table of Model Performance')
 
-
     st.write(pull())
     st.markdown(filedownload(table,'model_comparison.csv'), unsafe_allow_html=True)
 
     st.subheader('3. Plot of Model Performance')
+    fig = plt.figure(figsize=(15,6))
+    plt.xlabel('Models')
+    if usecase == "regression":
+        plt.bar(table['Model'].head(), table['R2'].head())
+        plt.ylabel('R Square')
+    else:
+        plt.bar(table['Model'].head(), table['Accuracy'].head())
+        plt.ylabel('Accuracy')
+    st.pyplot(fig)
+    st.markdown(imagedownload(fig,'r2_comparison'), unsafe_allow_html=True)
+    
 
 def filedownload(df, filename):
     csv = df.to_csv(index=True)
@@ -57,9 +67,8 @@ def filedownload(df, filename):
 def imagedownload(plt, filename):
     s = io.BytesIO()
     plt.savefig(s, format='png', bbox_inches='tight')
-    plt.close()
     b64 = base64.b64encode(s.getvalue()).decode()  # strings <-> bytes conversions
-    href = f'<a href="data:image/png;base64,{b64}" download={filename}>Download {filename} File</a>'
+    href = f'<a href="data:image/png;base64,{b64}" download={filename}>Download {filename} Image</a>'
     return href
 
 #---------------------------------#
