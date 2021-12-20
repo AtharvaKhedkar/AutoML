@@ -15,9 +15,16 @@ st.set_page_config(page_title='The Automatic Machine Learning App',
 #---------------------------------#
 # Model building
 
-def build_model(df):
-    X = df.drop(columns=[label])
+def build_model(df,removedfeatures):
+    if removedfeatures != []:
+        removedfeatures.append(label)
+        removedfeatures = set(removedfeatures)
+        X = df.drop(removedfeatures,axis=1)
+    else:
+        X = df.drop([label],axis=1)
+    
     Y = df[label]
+    
 
     st.markdown('**1.3. Dataset dimension**')
     st.write('X')
@@ -30,6 +37,12 @@ def build_model(df):
     st.info(list(X.columns[:20]))
     st.write('Y variable')
     st.info(Y.name)
+
+    st.markdown('**1.5. Data Correlation**:')
+    fig, ax = plt.subplots()
+    df_col = pd.concat([X,Y], axis=1)
+    sns.heatmap(df_col.corr(), ax=ax)
+    st.pyplot(fig)
 
     # Build  model
     wip = 'Building your models, Please Wait....'
@@ -95,7 +108,7 @@ with st.sidebar.header('Paste CSV data link here'):
 
 # Sidebar - Specify parameter settings
 with st.sidebar.header('2. Set Parameters'):
-    usecase = st.sidebar.selectbox('Select dataset type (Regression/Classification)', ['regression','classification'])    
+    usecase = st.sidebar.selectbox('Select dataset type (Regression/Classification)', ['regression','classification'])  
 
 #---------------------------------#
 # Main panel
@@ -111,8 +124,13 @@ if uploaded_file is not None:
     st.write(df)
     label = None 
     label = st.sidebar.selectbox('Select target attribute',df.columns)
-    if label is not None:
-            build_model(df)
+    removedfeatures = st.sidebar.multiselect(
+     'Remove unnecessary features',
+     df.columns) 
+
+    button = st.sidebar.button('Train Models')
+    if label is not None and button:
+            build_model(df, removedfeatures)
         
 else:
     st.info('Awaiting for CSV file to be uploaded.')
@@ -123,10 +141,10 @@ else:
         label = 'Price'
         usecase = 'regression'
         df = pd.concat( [X,Y], axis=1 )
-
+        
         st.markdown('The Boston housing dataset is used as the example.')
         st.write(df.head(5))
-        build_model(df)
+        build_model(df,removedfeatures = [])
 
 
 with st.sidebar.subheader('Created by:'):
