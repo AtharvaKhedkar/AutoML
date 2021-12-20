@@ -130,4 +130,4 @@ else:
 
 
 with st.sidebar.subheader('Created by:'):
-    st.sidebar.markdown('''[Atharva Khedkar](https://atharvakhedkar.co/)''')
+    st.sidebar.markdown('''[Atharva Khedkar](https://linktr.ee/atharvakhedkar/)''')
