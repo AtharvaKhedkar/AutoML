@@ -85,6 +85,9 @@ def imagedownload(plt, filename):
     return href
 
 #---------------------------------#
+github_fork = '<a href="https://github.com/AtharvaKhedkar/AutoMl" target="_blank"><img style="position: absolute; top: 0; right: 30px; border: 0;" src="https://github.com/jamesflorentino/fork-ribbons/raw/master/ribbons/violet-white.png" alt="Fork me on GitHub"></a>'
+st.write(github_fork,unsafe_allow_html=True) 
+
 st.write("""
 # The Automatic Machine Learning App
 """)
