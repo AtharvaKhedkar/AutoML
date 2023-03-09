@@ -22,9 +22,9 @@ def build_model(df,removedfeatures):
         X = df.drop(removedfeatures,axis=1)
     else:
         X = df.drop([label],axis=1)
-    
+
     Y = df[label]
-    
+
 
     st.markdown('**1.3. Dataset dimension**')
     st.write('X')
@@ -69,7 +69,7 @@ def build_model(df,removedfeatures):
         plt.ylabel('Accuracy')
     st.pyplot(fig)
     st.markdown(imagedownload(fig,'r2_comparison'), unsafe_allow_html=True)
-    
+
 
 def filedownload(df, filename):
     csv = df.to_csv(index=True)
@@ -107,7 +107,7 @@ with st.sidebar.header('Paste CSV data link here'):
         pass
     else:
         st.sidebar.error('Please enter a valid csv link')
-    
+
 
 # Sidebar - Specify parameter settings
 with st.sidebar.header('2. Set Parameters'):
@@ -119,7 +119,7 @@ with st.sidebar.header('2. Set Parameters'):
 st.subheader('1. Dataset')
 
 if uploaded_file is not None:
-    
+
     if type(uploaded_file) is not str:
         uploaded_file.seek(0)
     df = pd.read_csv(uploaded_file)
@@ -134,7 +134,7 @@ if uploaded_file is not None:
     button = st.sidebar.button('Train Models')
     if label is not None and button:
             build_model(df, removedfeatures)
-        
+
 else:
     st.info('Awaiting for CSV file to be uploaded.')
     if st.button('Press to use Example Dataset'):
@@ -144,7 +144,7 @@ else:
         label = 'Price'
         usecase = 'regression'
         df = pd.concat( [X,Y], axis=1 )
-        
+
         st.markdown('The Boston housing dataset is used as the example.')
         st.write(df.head(5))
         build_model(df,removedfeatures = [])
